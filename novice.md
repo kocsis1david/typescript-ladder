@@ -65,6 +65,13 @@ const x = arr[0]; // number
 
 ## Non-nullable types
 
+Without scrict mode:
+
+~~~ts
+const x: string = null; // ok
+const y: string = undefined; // ok
+~~~
+
 Strict mode needs to be turned on in `.tsconfig`
 
 ~~~ts
