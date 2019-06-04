@@ -94,6 +94,10 @@ Literal types are in the Advanced beginner section of the tech ladder.
 
 ---
 
+## Primitive types	
+
+---
+
 ## Non-nullable types
 
 Without scrict mode:
@@ -123,10 +127,6 @@ const y: string | null = null; // ok
 const z: string | null = undefined; // error
 const w: string | undefined = undefined; // ok
 ~~~
-
----
-
-## Primitive types	
 
 ---
 
