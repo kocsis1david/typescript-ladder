@@ -1,16 +1,18 @@
-<!-- # Introduction
+class: center, middle
 
-## What does it do?
+# Typescript Tech Ladder novice
 
-* Remove type annotations
-* Transpile to old javascript
-* bundling is done by webpack or others -->
+http://www.techladder.io/?tech=typescript
 
-# Playground
+---
 
-## Set all options to strict, but allow implicit returns:
+## Playground
 
-If it's turned off, any javascript file is accepted.
+https://www.typescriptlang.org/play/index.html
+
+Set all options to strict.
+
+Allow implicit return:
 
 ~~~ts
 function findIndex<T>(arr: T[], value: T): number | undefined {
@@ -22,7 +24,7 @@ function findIndex<T>(arr: T[], value: T): number | undefined {
 }
 ~~~
 
-# Techladder
+---
 
 ## Type inference
 
@@ -41,27 +43,56 @@ But it's better to write out the return type if it's not void
 ~~~ts
 const obj = {
     a: "string",
-    b: 1,
+    b: [1, 2],
 };
 
 const a = obj.a; // string
-const b = obj.b; // number
+const b0 = obj.b[0]; // number
 ~~~
 
-### Array have the common type
-
-~~~ts
-const arr = [1, "string"];
-const x = arr[0]; // string | number
-~~~
+---
 
 ## Type annotations
 
-<!-- TODO: better example -->
+### Arrays have the best common type of the elements
+
+~~~ts
+const arr = [1, "string"]; // (string | number)[]
+const x = arr[0]; // string | number
+~~~
+
+This allows modifying `arr` later:
+
+~~~ts
+arr[0] = "something";
+~~~
+
+### Annotating `arr` with a tuple type
+
 ~~~ts
 const arr: [number, string] = [1, "string"];
 const x = arr[0]; // number
 ~~~
+
+~~~ts
+// ERROR: string is not assignable to a number
+arr[0] = "something";
+~~~
+
+---
+
+### In const context, it has a tuple type
+
+~~~ts
+const arr = [1, "string"] as const; // [1, "string"]
+const x = arr[0]; // 1
+~~~
+
+Const context was introduced in TypeScript 3.4
+
+Literal types are in the Advanced beginner section of the tech ladder.
+
+---
 
 ## Non-nullable types
 
@@ -74,6 +105,17 @@ const y: string = undefined; // ok
 
 Strict mode needs to be turned on in `.tsconfig`
 
+~~~json
+{
+    "compilerOptions": {
+        "strict": true,
+        ...
+    }
+}
+~~~
+
+And now there are errors for nullability:
+
 ~~~ts
 const x: string = null; // error
 const y: string | null = null; // ok
@@ -82,7 +124,33 @@ const z: string | null = undefined; // error
 const w: string | undefined = undefined; // ok
 ~~~
 
+---
+
+## Primitive types	
+
+---
+
+## Structural type system
+
+---
+
 ## Function declarations & function expressions
+
+### Generic arrow function
+
+~~~ts
+const chooseFromTwo = <T>(a: T, b: T) => {
+    if (Math.random() < 0.5) {
+        return a;
+    } else {
+        return b;
+    }
+};
+
+const result = chooseFromTwo("alma", "körte");
+~~~
+
+---
 
 ## Tuples
 
@@ -113,6 +181,8 @@ tuple2 = ["asd", 1]; // ok
 tuple2 = ["asd", null, null, 1]; // ok
 tuple2 = ["asd", "string"]; // error
 ~~~
+
+---
 
 ## Interfaces
 
@@ -171,5 +241,7 @@ interface Test3 extends Test {
     a: number | null;
 }
 ~~~
+
+---
 
 ## String templates & tagged templates

@@ -13,16 +13,14 @@
             font-family: 'Droid Serif';
         }
 
-        h1,
-        h2,
-        h3 {
+        h1, h2, h3 {
             font-family: 'Yanone Kaffeesatz';
             font-weight: normal;
         }
 
-        .remark-code,
-        .remark-inline-code {
+        .remark-code, .remark-inline-code {
             font-family: 'Ubuntu Mono';
+            border-radius: 4px;
         }
     </style>
 </head>
@@ -31,7 +29,8 @@
     <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
     <script>
         var slideshow = remark.create({
-            sourceUrl: 'novice.md'
+            sourceUrl: 'novice.md',
+            highlightStyle: "agate"
         });
     </script>
 </body>
