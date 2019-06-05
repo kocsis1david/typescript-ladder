@@ -6,6 +6,8 @@ http://www.techladder.io/?tech=typescript
 
 ---
 
+
+
 ## Playground
 
 https://www.typescriptlang.org/play/index.html
@@ -26,6 +28,8 @@ function findIndex<T>(arr: T[], value: T): number | undefined {
 
 ---
 
+
+
 ## Type inference
 
 ### Function return type is inferred
@@ -36,7 +40,7 @@ function add(x: number, y: number) {
 }
 ~~~
 
-But it's better to write out the return type if it's not void
+Not the best idea, only omit the return type, if it's `void`
 
 ### Objects fields are also inferred
 
@@ -52,7 +56,9 @@ const b0 = obj.b[0]; // number
 
 ---
 
-## Type annotations
+
+
+## Type annotations #1
 
 ### Arrays have the best common type of the elements
 
@@ -75,11 +81,15 @@ const x = arr[0]; // number
 ~~~
 
 ~~~ts
-// ERROR: string is not assignable to a number
+// error: string is not assignable to a number
 arr[0] = "something";
 ~~~
 
 ---
+
+
+
+## Type annotations #2
 
 ### In const context, it has a tuple type
 
@@ -94,9 +104,87 @@ Literal types are in the Advanced beginner section of the tech ladder.
 
 ---
 
-## Primitive types	
+
+
+## Primitive types #1
+
+### Similar to ther languages
+
+`boolean`, `number`, `string`, `void`, arrays, tuples, enums
+
+### `null` and `undefined`
+
+~~~ts
+// Not much else we can assign to these variables!
+let u: undefined = undefined;
+let n: null = null;
+~~~
+
+### `never`
+
+~~~ts
+function infiniteLoop(): never {
+    while (true) {}
+}
+~~~
 
 ---
+
+
+
+## Primitive types #2
+
+### `any` - Assign anything to it
+
+~~~ts
+let x: any;
+
+x = true;
+x = "asd";
+x = [4, 5];
+~~~
+
+### `object` - Only allows JS objects
+
+~~~ts
+let x: object = {
+    something: true,
+};
+
+x = false; // error
+x = "something"; // error
+
+x = { // ok
+    otherThing: false,
+}; 
+~~~
+
+---
+
+
+
+## Primitive types #3
+
+### The `unknown` type
+
+Safer than `any`.
+
+~~~ts
+let x: unknown = 4;
+let y: string = x; // error
+let z: string = x as string; // ok, but ...
+~~~
+
+With `any`, there is no compile error at all:
+
+~~~ts
+let x: any = 4;
+let y: string = x; // ok
+~~~
+
+---
+
+
 
 ## Non-nullable types
 
@@ -118,7 +206,7 @@ Strict mode needs to be turned on in `.tsconfig`
 }
 ~~~
 
-And now there are errors for nullability:
+And now there are good errors for nullability:
 
 ~~~ts
 const x: string = null; // error
@@ -130,9 +218,130 @@ const w: string | undefined = undefined; // ok
 
 ---
 
-## Structural type system
+
+
+## Structural type system #1
+
+### C# is a nominally-typed language
+
+~~~cs
+struct A
+{
+    public int x;
+}
+
+struct B
+{
+    public int x;
+}
+
+public static void Main(String[] args)
+{
+    var a = new A()
+    {
+        x = 10,
+    };
+
+    B b = a; // error
+}
+~~~
+
+This is not allowed, becuase struct `A` and `B` have different names.
 
 ---
+
+
+## Structural type system #2
+
+### Typescript is structurally-typed
+
+~~~ts
+interface A {
+    x: number;
+}
+
+interface B {
+    x: number;
+}
+
+const a = {
+    x: 10,
+};
+
+const b: B = a; // ok
+~~~
+
+In a structural type system, the name of the type doesn't matter.
+
+When assigning a value to a variable, each member is checked recursively.
+
+---
+
+
+
+## Structural type system #3
+
+~~~ts
+interface HasLength {
+    length: number;
+}
+
+printLength("asdasd"); // ok
+printLength([3, 5]); // ok
+printLength({ length: 3 }); // ok
+printLength(3); // error
+
+function printLength(obj: HasLength) {
+    console.log(obj.length);
+}
+~~~
+
+`printLength` accepts anything that has a `length`.
+
+No need to implement `HasLength` explicity.
+
+---
+
+
+
+## Structural type system #4
+
+### Ignored argument
+~~~ts
+function test1(func1: (x: number) => number) {
+    test2(func1);   
+}
+
+function test2(func2: (x: number, y: number) => number) {
+    func2(1, 2);
+}
+
+test1(x => x + 1);
+~~~
+
+`func1` is a subtype of `func2`, because you can assign `func1` to `func2`.
+
+---
+
+
+
+## Structural type system #5
+
+### Each parameter and return type is checked recursively
+
+~~~ts
+function something(x: boolean | null): string {
+    return x ? "asd" : "asdasd";
+}
+
+const f: (x: boolean, y: number[]) => string | number = something; // ok
+~~~
+
+Functions are covariant for the return type and contravariant for the parameters.
+
+---
+
+
 
 ## Function declarations & function expressions
 
@@ -151,6 +360,8 @@ const result = chooseFromTwo("alma", "körte");
 ~~~
 
 ---
+
+
 
 ## Tuples
 
@@ -183,6 +394,8 @@ tuple2 = ["asd", "string"]; // error
 ~~~
 
 ---
+
+
 
 ## Interfaces
 
@@ -243,5 +456,7 @@ interface Test3 extends Test {
 ~~~
 
 ---
+
+
 
 ## String templates & tagged templates
