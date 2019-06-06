@@ -182,6 +182,8 @@ let x: any = 4;
 let y: string = x; // ok
 ~~~
 
+And it runs in the browser without error.
+
 ---
 
 
@@ -249,6 +251,7 @@ public static void Main(String[] args)
 This is not allowed, becuase struct `A` and `B` have different names.
 
 ---
+
 
 
 ## Structural type system #2
@@ -343,7 +346,59 @@ Functions are covariant for the return type and contravariant for the parameters
 
 
 
-## Function declarations & function expressions
+## Function declarations & function expressions #1
+
+### Optional parameters
+
+~~~ts
+function test(x: number, y?: string) {
+    const yy: string | undefined = y;
+
+    console.log(yy.length); // error
+
+    if (yy) {
+        console.log(yy.length); // ok
+    }
+}
+
+test(10);
+~~~
+
+### Default parameters
+
+~~~ts
+function test(x: number, y: string = "alma") {
+    console.log(y.length); // ok
+}
+
+test(10);
+~~~
+
+---
+
+
+
+## Function declarations & function expressions #3
+
+### Rest & spread
+
+~~~ts
+function sum(...numbers: number[]): number {
+    return numbers.reduce((x, y) => x + y, 0);
+}
+
+console.log(sum()); // 0
+console.log(sum(2, 5, 1)); // 8
+console.log(sum(...[2, 3, 4].map(x => x * x))); // 29
+~~~
+
+In C#, the `params` keyword has the same purpose.
+
+---
+
+
+
+## Function declarations & function expressions #2
 
 ### Generic arrow function
 
@@ -356,7 +411,8 @@ const chooseFromTwo = <T>(a: T, b: T) => {
     }
 };
 
-const result = chooseFromTwo("alma", "körte");
+const a = chooseFromTwo("alma", "körte");
+const b = chooseFromTwo(2, 56);
 ~~~
 
 ---
@@ -397,7 +453,7 @@ tuple2 = ["asd", "string"]; // error
 
 
 
-## Interfaces
+## Interfaces #1
 
 Interfaces lets you specify what properties are needed for the function:
 
@@ -426,6 +482,12 @@ func({
 });
 ~~~
 
+---
+
+
+
+## Interfaces #2
+
 Interfaces can be extended to have stricter requirements on the object:
 
 ~~~ts
@@ -446,14 +508,27 @@ const obj2: Test2 = {
 };
 ~~~
 
-But you get an error if a property is less strict than the base interface's property:
+You gen an error if a property is less strict:
 
 ~~~ts
-// not allowed
 interface Test3 extends Test {
-    a: number | null;
+    a: number | null; // error
 }
 ~~~
+
+---
+
+
+
+## Interfaces #3
+
+Indexable, callable, etc interfaces
+
+---
+
+
+
+## Modules
 
 ---
 
