@@ -421,7 +421,7 @@ const b = chooseFromTwo(2, 56);
 
 ## Tuples
 
-Tuples are a subset of arrays with different types for each element.
+Tuples allow different types for each element of the array:
 
 ~~~ts
 const tuple: [number, string, boolean, null] = [1, "asd", true, null];
@@ -522,16 +522,110 @@ interface Test3 extends Test {
 
 ## Interfaces #3
 
-Indexable, callable, etc interfaces
+### Index signature
+
+~~~ts
+interface Translations {
+    [code: string]: string | undefined
+}
+
+const t: Translations = {};
+t.MC001 = "Something";
+t["MC002"] = "Other thing";
+
+const value1 = t["MC002"]; // ok, type is string | undefined
+const value2 = t.MC003; // ok, type is string | undefined
+
+t["MC434"] = true; // error
+~~~
+
+Brackets and field access can be used interchangeably.
 
 ---
 
 
 
-## Modules
+## Interfaces #4
+
+### Function types with interfaces
+
+~~~ts
+interface SomeFunction {
+    (x: number): string
+}
+
+const someFunc: SomeFunction = x => x.toString();
+~~~
+
+But this is easier with type aliases:
+
+~~~ts
+type SomeFunction = (x: number) => string;
+const someFunc: SomeFunction = x => x.toString();
+~~~
 
 ---
 
 
 
-## String templates & tagged templates
+## Modules #1
+
+Each file is a module.
+
+~~~
+test/
+    moduleA.ts
+    moduleB.ts
+    index.ts
+main.ts
+~~~
+
+#### moduleA.ts
+
+~~~ts
+export function fib(x: number): number {
+    if (x < 2) return 1;
+    else return fib(x - 1) + fib(x - 2);
+}
+~~~
+
+#### moduleB.ts
+~~~ts
+export const VALUE = 20;
+~~~
+
+---
+
+
+## Modules #2
+
+#### index.ts
+
+`fib` and everything from `moduleB` can be imported from `index.ts`.
+
+~~~ts
+export { fib } from "./moduleA"
+export * from "./moduleC"
+~~~
+
+#### main.ts
+
+Use modules instead of namespaces.
+
+~~~ts
+import * as test from "./test"
+
+console.log(test.fib(test.CONSTANT));
+~~~
+
+---
+
+
+
+class: center, middle
+
+# The End
+
+Also check the Roadmap for new features:
+
+https://github.com/Microsoft/TypeScript/wiki/Roadmap
